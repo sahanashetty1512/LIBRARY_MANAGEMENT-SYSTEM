@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h2>Dashboard</h2>
+<ul>
+  <li>Total Books: {{ total_books }}</li>
+  <li>Available Books: {{ available_books }}</li>
+  <li>Issued Books: {{ issued_books }}</li>
+  {% if session['user_role'] == 'user' %}
+    <li>Your Total Fine: ${{ total_fine }}</li>
+  {% endif %}
+</ul>
+
+<h3>Recent Books</h3>
+<table border="1" cellpadding="5" cellspacing="0">
+  <tr><th>Title</th><th>Author</th><th>Category</th><th>Total</th><th>Available</th></tr>
+  {% for book in recent_books %}
+  <tr>
+    <td>{{ book.title }}</td>
+    <td>{{ book.author }}</td>
+    <td>{{ book.category }}</td>
+    <td>{{ book.total }}</td>
+    <td>{{ book.available }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<h3>Notifications</h3>
+<ul>
+  {% for note in notifications %}
+    <li>{{ note.date_sent.strftime('%Y-%m-%d %H:%M') }}: {{ note.message }}
+      {% if session['user_role'] == 'admin' %} (from {{ note.sender }}) {% endif %}
+    </li>
+  {% endfor %}
+</ul>
+
+{% if session['user_role'] == 'admin' %}
+  <p>
+    <a href="{{ url_for('books') }}">Manage Books</a> | 
+    <a href="{{ url_for('send_notification') }}">Send Notification</a> | 
+    <a href="{{ url_for('reports') }}">View Reports</a>
+  </p>
+{% else %}
+  <p>
+    <a href="{{ url_for('issue_return') }}">Issue/Return Books</a> | 
+    <a href="{{ url_for('pay_fines') }}">Pay Fines</a> | 
+    <a href="{{ url_for('search') }}">Search Books</a>
+  </p>
+{% endif %}
+{% endblock %}

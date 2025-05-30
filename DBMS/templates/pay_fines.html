@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block title %}Pay Fines{% endblock %}
+{% block content %}
+<h2>Pay Fines</h2>
+{% if message %}
+  <p><strong>{{ message }}</strong></p>
+{% endif %}
+{% if fines %}
+<form method="POST" action="{{ url_for('pay_fines') }}">
+  <table border="1">
+    <tr><th>Select</th><th>Issue Log ID</th><th>Fine Amount</th></tr>
+    {% for fine in fines %}
+    <tr>
+      <td><input type="checkbox" name="pay_fines" value="{{ fine.id }}" /></td>
+      <td>{{ fine.id }}</td>
+      <td>${{ fine.fine }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  <button type

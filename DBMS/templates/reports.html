@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Issue/Return Report</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+    <div class="container">
+        <h2>Issue/Return Report</h2>
+        <a href="{{ url_for('dashboard') }}">Back to Dashboard</a><br /><br />
+
+        {% if issues %}
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>User Name</th>
+                    <th>Book Title</th>
+                    <th>Issue Date</th>
+                    <th>Due Date</th>
+                    <th>Return Date</th>
+                    <th>Fine</th>
+                    <th>Paid</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for issue in issues %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ issue.user_name }}</td>
+                    <td>{{ issue.book_title }}</td>
+                    <td>{{ issue.issue_date.strftime('%Y-%m-%d') }}</td>
+                    <td>{{ issue.due_date.strftime('%Y-%m-%d') }}</td>
+                    <td>
+                        {% if issue.return_date %}
+                            {{ issue.return_date.strftime('%Y-%m-%d') }}
+                        {% else %}
+                            Not returned
+                        {% endif %}
+                    </td>
+                    <td>{{ issue.fine }}</td>
+                    <td>{{ 'Yes' if issue.paid else 'No' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No issue records found.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
